@@ -14,7 +14,6 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
     }
 
-
     public void buttonInfoClick(View view) {
         startActivity(new Intent(this, InfoActivity.class));
     }
