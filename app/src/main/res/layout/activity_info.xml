@@ -1,9 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context="piotr.rsrpechhulp.activities.InfoActivity">
 
-</RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/actionbar_height"
+            style="@style/ActionBar">
+        <Button
+                android:id="@+id/btn_info"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_centerVertical="true"
+                android:drawableStart="@drawable/menu_arrow"
+                android:text="@string/info_back_button"
+                android:onClick="buttonBack"
+                style="@style/ActionBarButtonBack" tools:ignore="OnClick"/>
+    </RelativeLayout>
+
+    <ImageView
+            android:id="@+id/info_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:layout_weight="4"
+            android:src="@drawable/info_bg"/>
+
+    <View
+            android:id="@+id/divisor"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/horizontal_line_height"
+            android:background="@color/primary_color"/>
+
+    <ScrollView
+            android:id="@+id/info_text_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/background_color">
+        <TextView
+                android:id="@+id/info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:text="@string/info_text"
+                android:autoLink="web"
+                style="@style/InfoTextAppearance"/>
+    </ScrollView>
+
+</LinearLayout>
