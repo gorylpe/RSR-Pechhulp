@@ -4,10 +4,9 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import android.support.v4.app.FragmentActivity;
@@ -34,8 +33,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap map;
 
     private LocationService locationService;
+    private boolean locationServiceBound;
     private IntentFilter locationServiceIntentFilter;
 
+    private Location lastLocation;
+
+    private AlertDialog lastAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +64,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void bindToLocationService() {
         Intent intent = new Intent(this, LocationService.class);
-        bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
+        locationServiceBound = bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(locationServiceConnection);
+        if(locationServiceBound)
+            unbindService(locationServiceConnection);
     }
 
     private ServiceConnection locationServiceConnection = new ServiceConnection() {
@@ -85,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onResume() {
         super.onResume();
-        checkGPSAndInternet();
+        checkGPSAndInternetAvailability();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, locationServiceIntentFilter);
         if(locationService != null){
             locationService.startListening();
@@ -132,9 +136,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (action.equals(LocationService.ACTION_LOCATION_CHANGED)) {
                 final Location location = intent.getParcelableExtra(LocationService.LOCATION_INTENT_EXTRAS);
-                onLocationReceived(location);
+                MapsActivity.this.onLocationReceived(location);
             } else if (action.equals(LocationService.ACTION_NO_GPS)) {
-                MapsActivity.this.checkGPSAndInternet();
+                MapsActivity.this.checkGPSAndInternetAvailability();
             } else if (action.equals(LocationService.ACTION_NO_PERMISSIONS)) {
                 MapsActivity.this.checkGPSPermissions();
             }
@@ -142,6 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     };
 
     private void onLocationReceived(Location location) {
+        lastLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if(map != null)
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -160,21 +165,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(this, R.string.error_gps_no_permissions, Toast.LENGTH_SHORT).show();
                     finish();
                 }
+                break;
+        }
+    }
+
+    private void checkGPSAndInternetAvailability() {
+        /* Don't check if previous dialog is still opened, can happen if GPS disabled in status bar shortcuts
+           and location service broadcast ACTION_NO_GPS */
+        if(lastAlertDialog != null && lastAlertDialog.isShowing())
+            return;
+
+        if(!Utils.checkGPSEnable(this))
+            (lastAlertDialog = Utils.buildAlertMessageGpsDisabled(this)).show();
+        else if(!Utils.checkInternetConnectivity(this))
+            (lastAlertDialog = Utils.buildAlertMessageNoInternet(this, onRetryClick)).show();
+        else {
+
         }
     }
 
     private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
         @Override
         public void onRetryClick() {
-            MapsActivity.this.checkGPSAndInternet();
+            if(lastAlertDialog != null) lastAlertDialog.dismiss();
+            MapsActivity.this.checkGPSAndInternetAvailability();
         }
     };
-
-    private void checkGPSAndInternet() {
-        if(!Utils.checkGPSEnable(this))
-            Utils.buildAlertMessageGpsDisabled(this).show();
-        else if(!Utils.checkInternetConnectivity(this)){
-            Utils.buildAlertMessageNoInternet(this, onRetryClick).show();
-        }
-    }
 }

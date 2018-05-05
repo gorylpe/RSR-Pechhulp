@@ -1,6 +1,7 @@
 package piotr.rsrpechhulp.activities;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +11,7 @@ import piotr.rsrpechhulp.utils.Utils;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
-        @Override
-        public void onRetryClick() {
-            MainMenuActivity.this.checkGPSAndInternet();
-        }
-    };
+    private AlertDialog lastAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,20 +19,31 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
     }
 
-    private void checkGPSAndInternet() {
-        if(!Utils.checkGPSEnable(this))
-            Utils.buildAlertMessageGpsDisabled(this).show();
-        else if(!Utils.checkInternetConnectivity(this)){
-            Utils.buildAlertMessageNoInternet(this, onRetryClick).show();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-
-        checkGPSAndInternet();
+        checkGPSAndInternetAvailability();
     }
+
+    private void checkGPSAndInternetAvailability() {
+        //Don't check if previous dialog is still opened
+        if (lastAlertDialog != null && lastAlertDialog.isShowing())
+            return;
+
+        if(!Utils.checkGPSEnable(this))
+            (lastAlertDialog = Utils.buildAlertMessageGpsDisabled(this)).show();
+        else if(!Utils.checkInternetConnectivity(this)){
+            (lastAlertDialog = Utils.buildAlertMessageNoInternet(this, onRetryClick)).show();
+        }
+    }
+
+    private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
+        @Override
+        public void onRetryClick() {
+            if(lastAlertDialog != null) lastAlertDialog.dismiss();
+            MainMenuActivity.this.checkGPSAndInternetAvailability();
+        }
+    };
 
     public void buttonInfoClick(View view) {
         startActivity(new Intent(this, InfoActivity.class));
