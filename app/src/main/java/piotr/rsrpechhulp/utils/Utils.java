@@ -34,7 +34,7 @@ public class Utils {
      * @param activity the activity to start settings from or finish
      * @return created AlertDialog
      */
-    public static AlertDialog buildAlertMessageNoGps(final Activity activity) {
+    public static AlertDialog buildAlertMessageGpsDisabled(final Activity activity) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(R.string.error_gps_disabled_message)
                 .setTitle(R.string.error_gps_disabled_title)
@@ -79,12 +79,17 @@ public class Utils {
      * @param activity the activity to start settings from or finish
      * @return created AlertDialog
      */
-    public static AlertDialog buildAlertMessageNoInternet(final Activity activity, final DialogInterface.OnClickListener onRetryListener) {
+    public static AlertDialog buildAlertMessageNoInternet(final Activity activity, final OnRetryClickListener onRetryClickListener) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(R.string.error_network_message)
                 .setTitle(R.string.error_network_title)
                 .setCancelable(false)
-                .setPositiveButton(R.string.error_retry, onRetryListener)
+                .setPositiveButton(R.string.error_retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        onRetryClickListener.onRetryClick();
+                    }
+                })
                 .setNegativeButton(R.string.error_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

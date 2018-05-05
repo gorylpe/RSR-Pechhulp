@@ -1,18 +1,18 @@
 package piotr.rsrpechhulp.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import piotr.rsrpechhulp.R;
+import piotr.rsrpechhulp.utils.OnRetryClickListener;
 import piotr.rsrpechhulp.utils.Utils;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private final DialogInterface.OnClickListener onRetryCheckClick = new DialogInterface.OnClickListener() {
+    private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
         @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
+        public void onRetryClick() {
             MainMenuActivity.this.checkGPSAndInternet();
         }
     };
@@ -25,9 +25,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void checkGPSAndInternet() {
         if(!Utils.checkGPSEnable(this))
-            Utils.buildAlertMessageNoGps(this).show();
+            Utils.buildAlertMessageGpsDisabled(this).show();
         else if(!Utils.checkInternetConnectivity(this)){
-            Utils.buildAlertMessageNoInternet(this, onRetryCheckClick).show();
+            Utils.buildAlertMessageNoInternet(this, onRetryClick).show();
         }
     }
 
