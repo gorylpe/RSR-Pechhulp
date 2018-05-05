@@ -8,11 +8,10 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import piotr.rsrpechhulp.R;
 
 public class Utils {
-
-    public static final String ACTION_LOCATION_SOURCE_SETTINGS = "android.settings.LOCATION_SOURCE_SETTINGS";
 
     /**
      * Checks if GPS location provider is enabled
@@ -43,7 +42,7 @@ public class Utils {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        activity.startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+                        activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
                 .setNegativeButton(R.string.error_cancel, new DialogInterface.OnClickListener() {
