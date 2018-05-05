@@ -25,4 +25,5 @@
         locatiegegevens niet worden opgehaald.
     </string>
     <string name="error_network_title">Geen internetverbinding</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

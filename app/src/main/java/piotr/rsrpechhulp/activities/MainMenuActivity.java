@@ -43,6 +43,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void buttonMapClick(View view) {
-        startActivity(new Intent(this, MapActivity.class));
+        startActivity(new Intent(this, MapsActivity.class));
     }
 }
