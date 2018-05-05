@@ -11,4 +11,18 @@
         uitproberen en rustig bekijken wat goed bij uw situatie aansluit. Samen met u zoeken we naar het hulpmiddel dat
         bij u past. RSR maakt mensen mobiel.
     </string>
+
+    <string name="error_cancel">Annuleren</string>
+    <string name="error_accept">Ga naar instellingen</string>
+    <string name="error_retry">Probeer opnieuw</string>
+
+    <string name="error_gps_disabled_message">RSR pechhulp heeft toegang tot uw locatie nodig. Schakel locatietoegang
+        in.
+    </string>
+    <string name="error_gps_disabled_title">Locatieservices uitgeschakeld</string>
+
+    <string name="error_network_message">Er is geen verbinding mogelijk met het internet. Hierdoor kunnen uw
+        locatiegegevens niet worden opgehaald.
+    </string>
+    <string name="error_network_title">Geen internetverbinding</string>
 </resources>
