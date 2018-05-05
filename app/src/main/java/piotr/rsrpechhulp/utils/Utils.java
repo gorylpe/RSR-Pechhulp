@@ -1,14 +1,18 @@
 package piotr.rsrpechhulp.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import piotr.rsrpechhulp.R;
 
 public class Utils {
@@ -53,6 +57,26 @@ public class Utils {
                     }
                 });
         return builder.create();
+    }
+
+    public static boolean checkGPSPermissions(Context context) {
+        return Utils.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    public static void requestGPSPermissions(Activity activity, final int requestCode) {
+        requestPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION, requestCode);
+    }
+
+    public static boolean checkPermission(final Context context, final String permission) {
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestPermission(final Activity activity, final String permission, final int requestCode) {
+        requestPermissions(activity, new String[]{permission}, requestCode);
+    }
+
+    public static void requestPermissions(final Activity activity, final String[] permissions, final int requestCode) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
     /**

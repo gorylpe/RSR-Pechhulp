@@ -1,18 +1,19 @@
 package piotr.rsrpechhulp.activities;
 
-import android.Manifest;
-import android.content.Context;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.os.IBinder;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,12 +22,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import piotr.rsrpechhulp.R;
+import piotr.rsrpechhulp.utils.LocationService;
+import piotr.rsrpechhulp.utils.OnRetryClickListener;
+import piotr.rsrpechhulp.utils.Utils;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private static final String TAG = MapsActivity.class.getSimpleName();
+    private static final int GPS_PERMISSIONS_REQUEST_CODE = 200;
 
     private GoogleMap map;
 
-    private LocationManager locationManager;
+    private LocationService locationService;
+    private IntentFilter locationServiceIntentFilter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +47,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationServiceIntentFilter = new IntentFilter();
+        locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
+        locationServiceIntentFilter.addAction(LocationService.ACTION_NO_PERMISSIONS);
+        locationServiceIntentFilter.addAction(LocationService.ACTION_NO_GPS);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bindToLocationService();
+    }
+
+    private void bindToLocationService() {
+        Intent intent = new Intent(this, LocationService.class);
+        bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(locationServiceConnection);
+    }
+
+    private ServiceConnection locationServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MapsActivity.this.locationService = ((LocationService.LocalBinder) iBinder).getService();
+            MapsActivity.this.locationService.startListening();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {}
+    };
+
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        checkGPSAndInternet();
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, locationServiceIntentFilter);
+        if(locationService != null){
+            locationService.startListening();
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10.0f, this);
     }
 
     @Override
     public void onPause() {
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        if(locationService != null)
+            locationService.stopListening();
         super.onPause();
-        locationManager.removeUpdates(this);
     }
 
     /**
@@ -79,25 +122,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         finish();
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            //Only checking actions from LocationService
+            if(null == action)
+                return;
+
+            if (action.equals(LocationService.ACTION_LOCATION_CHANGED)) {
+                final Location location = intent.getParcelableExtra(LocationService.LOCATION_INTENT_EXTRAS);
+                onLocationReceived(location);
+            } else if (action.equals(LocationService.ACTION_NO_GPS)) {
+                MapsActivity.this.checkGPSAndInternet();
+            } else if (action.equals(LocationService.ACTION_NO_PERMISSIONS)) {
+                MapsActivity.this.checkGPSPermissions();
+            }
+        }
+    };
+
+    private void onLocationReceived(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if(map != null)
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
+    private void checkGPSPermissions() {
+        if(!Utils.checkGPSPermissions(MapsActivity.this))
+            Utils.requestGPSPermissions(MapsActivity.this, GPS_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
-    public void onProviderEnabled(String s) {
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case GPS_PERMISSIONS_REQUEST_CODE:
+                if(grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, R.string.error_gps_no_permissions, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+        }
     }
 
-    @Override
-    public void onProviderDisabled(String s) {
+    private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
+        @Override
+        public void onRetryClick() {
+            MapsActivity.this.checkGPSAndInternet();
+        }
+    };
 
+    private void checkGPSAndInternet() {
+        if(!Utils.checkGPSEnable(this))
+            Utils.buildAlertMessageGpsDisabled(this).show();
+        else if(!Utils.checkInternetConnectivity(this)){
+            Utils.buildAlertMessageNoInternet(this, onRetryClick).show();
+        }
     }
 }

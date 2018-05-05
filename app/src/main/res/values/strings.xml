@@ -23,6 +23,7 @@
         in.
     </string>
     <string name="error_gps_disabled_title">Locatieservices uitgeschakeld</string>
+    <string name="error_gps_no_permissions">Geen GPS-toestemming</string>
 
     <string name="error_network_message">Er is geen verbinding mogelijk met het internet. Hierdoor kunnen uw
         locatiegegevens niet worden opgehaald.
