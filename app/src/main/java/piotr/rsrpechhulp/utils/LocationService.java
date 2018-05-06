@@ -18,7 +18,9 @@ public class LocationService extends Service {
 
     private static final String TAG = LocationService.class.getSimpleName();
 
+    /** Action name for location broadcasting using Intent */
     public static final String ACTION_LOCATION_CHANGED = LocationService.class.getCanonicalName() + ".LOCATION";
+    /** Name of field in Intent extras containing location */
     public static final String LOCATION_INTENT_EXTRAS = "LOCATION";
 
     private static final int LOCATION_UPDATE_INTERVAL = 1000;
@@ -51,25 +53,38 @@ public class LocationService extends Service {
         };
     }
 
+    /**
+     * Starts listening for location updates.
+     */
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     @SuppressWarnings({"MissingPermission"})
     public void startListening() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
 
+    /**
+     * Stops listening for locations updates
+     */
     public void stopListening() {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
+    /**
+     * Called when new location is obtained.
+     * @param location obtained location
+     */
     private void onLocationChanged(Location location) {
-        Log.i(TAG, "onLocationChanged " + location.toString());
         if(isBetterLocation(location)){
             currentBestLocation = location;
             sendNewLocation(location);
-            Log.i(TAG, "sending new best location " + location.toString());
         }
     }
 
+    /**
+     * Sends location to LocalBroadcast manager to be caught by BroadcastReceiver
+     * with proper IntentFilter
+     * @param location location to be sent
+     */
     private void sendNewLocation(Location location) {
         Intent intent = new Intent(ACTION_LOCATION_CHANGED);
         intent.putExtra(LOCATION_INTENT_EXTRAS, location);
@@ -81,7 +96,7 @@ public class LocationService extends Service {
     /** Determines whether one Location reading is better than the current Location fix
      * @param location  The new Location that you want to evaluate
      */
-    protected boolean isBetterLocation(Location location) {
+    private boolean isBetterLocation(Location location) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
@@ -130,7 +145,6 @@ public class LocationService extends Service {
         }
         return provider1.equals(provider2);
     }
-
 
     private final IBinder binder = new LocalBinder();
 
