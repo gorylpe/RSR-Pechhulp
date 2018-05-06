@@ -30,7 +30,7 @@ public class MainMenuActivity extends AppCompatActivity {
         if (lastAlertDialog != null && lastAlertDialog.isShowing())
             return;
 
-        if(!Utils.checkGPSEnable(this))
+        if(!Utils.checkGPSEnabled(this))
             (lastAlertDialog = Utils.buildAlertMessageGpsDisabled(this)).show();
         else if(!Utils.checkInternetConnectivity(this)){
             (lastAlertDialog = Utils.buildAlertMessageNoInternet(this, onRetryClick)).show();
@@ -41,7 +41,7 @@ public class MainMenuActivity extends AppCompatActivity {
         @Override
         public void onRetryClick() {
             if(lastAlertDialog != null) lastAlertDialog.dismiss();
-            MainMenuActivity.this.checkGPSAndInternetAvailability();
+            checkGPSAndInternetAvailability();
         }
     };
 

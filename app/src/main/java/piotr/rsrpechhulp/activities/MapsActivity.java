@@ -25,10 +25,13 @@ import piotr.rsrpechhulp.utils.LocationService;
 import piotr.rsrpechhulp.utils.OnRetryClickListener;
 import piotr.rsrpechhulp.utils.Utils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
-    private static final int GPS_PERMISSIONS_REQUEST_CODE = 200;
+    private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
 
     private GoogleMap map;
 
@@ -36,7 +39,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean locationServiceBound;
     private IntentFilter locationServiceIntentFilter;
 
+    private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
+    private static final int SEARCH_LOCATION_TIMEOUT = 20000;
     private Location lastLocation;
+    private Timer locationTimeoutTimer;
 
     private AlertDialog lastAlertDialog;
 
@@ -52,7 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
-        locationServiceIntentFilter.addAction(LocationService.ACTION_NO_PERMISSIONS);
         locationServiceIntentFilter.addAction(LocationService.ACTION_NO_GPS);
     }
 
@@ -70,29 +75,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-        if(locationServiceBound)
+        if(locationServiceBound){
             unbindService(locationServiceConnection);
+            locationServiceBound = false;
+        }
     }
 
     private ServiceConnection locationServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            MapsActivity.this.locationService = ((LocationService.LocalBinder) iBinder).getService();
-            MapsActivity.this.locationService.startListening();
+            locationService = ((LocationService.LocalBinder) iBinder).getService();
+            startLocationService();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {}
     };
 
-
     @Override
     public void onResume() {
         super.onResume();
         checkGPSAndInternetAvailability();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, locationServiceIntentFilter);
-        if(locationService != null){
-            locationService.startListening();
+        startLocationService();
+    }
+
+    @SuppressWarnings({"MissingPermission"})
+    private void startLocationService() {
+        if(locationService != null) {
+            if (!Utils.checkGPSPermissions(this)) {
+                Utils.requestGPSPermissions(this, GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE);
+            } else {
+                locationService.startListening();
+            }
         }
     }
 
@@ -101,6 +116,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
         if(locationService != null)
             locationService.stopListening();
+        if(locationTimeoutTimer != null)
+            locationTimeoutTimer.cancel();
         super.onPause();
     }
 
@@ -136,11 +153,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (action.equals(LocationService.ACTION_LOCATION_CHANGED)) {
                 final Location location = intent.getParcelableExtra(LocationService.LOCATION_INTENT_EXTRAS);
-                MapsActivity.this.onLocationReceived(location);
+                onLocationReceived(location);
             } else if (action.equals(LocationService.ACTION_NO_GPS)) {
-                MapsActivity.this.checkGPSAndInternetAvailability();
-            } else if (action.equals(LocationService.ACTION_NO_PERMISSIONS)) {
-                MapsActivity.this.checkGPSPermissions();
+                checkGPSAndInternetAvailability();
             }
         }
     };
@@ -148,20 +163,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void onLocationReceived(Location location) {
         lastLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if(map != null)
+        if(map != null) {
+            map.addMarker(new MarkerOptions().position(latLng));
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    }
-
-    private void checkGPSPermissions() {
-        if(!Utils.checkGPSPermissions(MapsActivity.this))
-            Utils.requestGPSPermissions(MapsActivity.this, GPS_PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch(requestCode) {
-            case GPS_PERMISSIONS_REQUEST_CODE:
-                if(grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            case GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationService();
+                } else {
                     Toast.makeText(this, R.string.error_gps_no_permissions, Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -170,25 +184,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void checkGPSAndInternetAvailability() {
-        /* Don't check if previous dialog is still opened, can happen if GPS disabled in status bar shortcuts
-           and location service broadcast ACTION_NO_GPS */
-        if(lastAlertDialog != null && lastAlertDialog.isShowing())
+        // Don't check if previous dialog is still opened
+        if(isActiveAlertDialog())
             return;
 
-        if(!Utils.checkGPSEnable(this))
+        if(!Utils.checkGPSEnabled(this))
             (lastAlertDialog = Utils.buildAlertMessageGpsDisabled(this)).show();
         else if(!Utils.checkInternetConnectivity(this))
-            (lastAlertDialog = Utils.buildAlertMessageNoInternet(this, onRetryClick)).show();
+            (lastAlertDialog = Utils.buildAlertMessageNoInternet(this, onRetryCheckClick)).show();
         else {
-
+            startLocationSearchingTimeoutTimer();
         }
     }
 
-    private final OnRetryClickListener onRetryClick = new OnRetryClickListener() {
+    private boolean isActiveAlertDialog() {
+        return lastAlertDialog != null && lastAlertDialog.isShowing();
+    }
+
+    private void startLocationSearchingTimeoutTimer() {
+        if(locationTimeoutTimer != null)
+            locationTimeoutTimer.cancel();
+
+        locationTimeoutTimer = new Timer();
+        locationTimeoutTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkLastLocationAccuracy();
+                    }
+                });
+            }
+        }, SEARCH_LOCATION_TIMEOUT);
+    }
+
+    private void checkLastLocationAccuracy() {
+        if(lastLocation == null || lastLocation.getAccuracy() > MINIMUM_LOCATION_ACCURACY) {
+            if(!isActiveAlertDialog()){
+                (lastAlertDialog = Utils.buildAlertMessageBadLocation(this, onRetryCheckClick)).show();
+            }
+        }
+    }
+
+    private final OnRetryClickListener onRetryCheckClick = new OnRetryClickListener() {
         @Override
         public void onRetryClick() {
             if(lastAlertDialog != null) lastAlertDialog.dismiss();
-            MapsActivity.this.checkGPSAndInternetAvailability();
+            checkGPSAndInternetAvailability();
         }
     };
 }
