@@ -26,15 +26,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import piotr.rsrpechhulp.R;
-import piotr.rsrpechhulp.utils.CustomInfoWindowAdapter;
-import piotr.rsrpechhulp.utils.LocationService;
-import piotr.rsrpechhulp.utils.OnRetryClickListener;
-import piotr.rsrpechhulp.utils.Utils;
+import piotr.rsrpechhulp.utils.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AddressObtainTask.Callback {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
@@ -58,6 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location lastLocation;
     private Timer locationTimeoutTimer;
 
+    private ReentrantLock addressObtainedLock;
+
     private AlertDialog lastAlertDialog;
 
     @Override
@@ -72,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         callPanelWrapper = findViewById(R.id.call_panel_wrapper);
         buttonCallNow = findViewById(R.id.button_call_now);
+
+        addressObtainedLock = new ReentrantLock();
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
@@ -145,6 +148,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void setNewLocation(LatLng latLng) {
+        if(map == null)
+            return;
+
+        hideLocationObtainingImage();
+
+        if(marker == null) {
+            marker = map.addMarker(createInitMarkerOptions());
+            marker.setTitle(getString(R.string.address_obtaining));
+            marker.showInfoWindow();
+        }
+        marker.setPosition(latLng);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
+
+        new AddressObtainTask(this, this).execute(latLng);
+    }
+
+    @Override
+    public void onAddressObtained(@NonNull final String address) {
+        addressObtainedLock.lock();
+        if(marker != null) {
+            marker.setTitle(address);
+            marker.showInfoWindow();
+        }
+        addressObtainedLock.unlock();
+    }
+
     /** This callback is triggered when the map is ready to be used. */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -162,21 +192,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.position(AMSTERDAM_LAT_LNG);
         markerOptions.infoWindowAnchor(0.5f, -0.2f);
         return markerOptions;
-    }
-
-    private void setNewLocation(LatLng latLng) {
-        if(map == null)
-            return;
-
-        hideLocationObtainingImage();
-
-        if(marker == null) {
-            marker = map.addMarker(createInitMarkerOptions());
-            marker.setTitle(getString(R.string.address_obtaining));
-            marker.showInfoWindow();
-        }
-        marker.setPosition(latLng);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
     }
 
     private void hideLocationObtainingImage() {
