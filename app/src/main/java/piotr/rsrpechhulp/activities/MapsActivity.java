@@ -58,7 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
-        locationServiceIntentFilter.addAction(LocationService.ACTION_NO_GPS);
     }
 
     @Override
@@ -154,8 +153,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (action.equals(LocationService.ACTION_LOCATION_CHANGED)) {
                 final Location location = intent.getParcelableExtra(LocationService.LOCATION_INTENT_EXTRAS);
                 onLocationReceived(location);
-            } else if (action.equals(LocationService.ACTION_NO_GPS)) {
-                checkGPSAndInternetAvailability();
             }
         }
     };

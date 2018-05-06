@@ -4,64 +4,64 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 
-public class LocationService extends Service implements LocationListener {
+public class LocationService extends Service {
 
     private static final String TAG = LocationService.class.getSimpleName();
 
     public static final String ACTION_LOCATION_CHANGED = LocationService.class.getCanonicalName() + ".LOCATION";
-    public static final String ACTION_NO_GPS = LocationService.class.getCanonicalName() + ".GPS";
-
     public static final String LOCATION_INTENT_EXTRAS = "LOCATION";
 
     private static final int LOCATION_UPDATE_INTERVAL = 1000;
     private static final float LOCATION_UPDATE_MIN_DISTANCE = 10.0f;
 
-    private LocationManager locationManager;
+    private LocationRequest locationRequest;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
 
     private Location currentBestLocation;
 
     @Override
     public void onCreate() {
-        locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(LOCATION_UPDATE_INTERVAL);
+        locationRequest.setSmallestDisplacement(LOCATION_UPDATE_MIN_DISTANCE);
+
+        fusedLocationClient = new FusedLocationProviderClient(this);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if(locationResult == null)
+                    return;
+
+                for(Location location : locationResult.getLocations()) {
+                    onLocationChanged(location);
+                }
+            }
+        };
     }
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     @SuppressWarnings({"MissingPermission"})
     public void startListening() {
-        //if it's enabled, it'll provide better location
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_UPDATE_INTERVAL, LOCATION_UPDATE_MIN_DISTANCE, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_INTERVAL, LOCATION_UPDATE_MIN_DISTANCE, this);
-        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, LOCATION_UPDATE_INTERVAL, LOCATION_UPDATE_MIN_DISTANCE, this);
-
-        final Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if(lastKnownLocation != null)
-            onLocationChanged(lastKnownLocation);
-    }
-
-    private void sendNoGPS() {
-        Intent intent = new Intent(ACTION_NO_GPS);
-        sendLocalBroadcast(intent);
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
 
     public void stopListening() {
-        locationManager.removeUpdates(this);
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    private void sendLocalBroadcast(Intent intent) {
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
+    private void onLocationChanged(Location location) {
         Log.i(TAG, "onLocationChanged " + location.toString());
         if(isBetterLocation(location)){
             currentBestLocation = location;
@@ -73,7 +73,7 @@ public class LocationService extends Service implements LocationListener {
     private void sendNewLocation(Location location) {
         Intent intent = new Intent(ACTION_LOCATION_CHANGED);
         intent.putExtra(LOCATION_INTENT_EXTRAS, location);
-        sendLocalBroadcast(intent);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -129,17 +129,6 @@ public class LocationService extends Service implements LocationListener {
             return provider2 == null;
         }
         return provider1.equals(provider2);
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) { }
-    @Override
-    public void onProviderEnabled(String s) { }
-    @Override
-    public void onProviderDisabled(String s) {
-        if(s.equals(LocationManager.GPS_PROVIDER)) {
-            sendNoGPS();
-        }
     }
 
 
