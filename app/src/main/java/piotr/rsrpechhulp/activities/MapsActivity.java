@@ -3,6 +3,7 @@ package piotr.rsrpechhulp.activities;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -44,6 +45,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean locationServiceBound;
     private IntentFilter locationServiceIntentFilter;
 
+    private IntentFilter GPSSwitchStateIntentFilter;
+
     private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
     private static final int SEARCH_LOCATION_TIMEOUT = 20000;
     private static final LatLng AMSTERDAM_LAT_LNG = new LatLng(52.370216, 4.895168);
@@ -64,6 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
+
+        GPSSwitchStateIntentFilter = new IntentFilter();
+        GPSSwitchStateIntentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
     }
 
     @Override
@@ -92,7 +98,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onResume() {
         super.onResume();
         checkGPSAndInternetAvailability();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, locationServiceIntentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(locationBroadcastReceiver, locationServiceIntentFilter);
+        registerReceiver(GPSSwitchStateReceiver, GPSSwitchStateIntentFilter);
         startLocationService();
     }
 
@@ -107,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver locationBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -168,6 +175,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
     }
 
+    private BroadcastReceiver GPSSwitchStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(action == null) return;
+
+            if(action.equals(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                checkGPSAndInternetAvailability();
+            }
+        }
+    };
+
     private void checkGPSAndInternetAvailability() {
         // Don't check if previous dialog is still opened
         if(isActiveAlertDialog())
@@ -222,7 +241,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onPause() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(locationBroadcastReceiver);
+        unregisterReceiver(GPSSwitchStateReceiver);
         if(locationService != null)
             locationService.stopListening();
         if(locationTimeoutTimer != null)
