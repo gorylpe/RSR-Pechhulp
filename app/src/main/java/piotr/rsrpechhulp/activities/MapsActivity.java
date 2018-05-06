@@ -17,10 +17,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import piotr.rsrpechhulp.R;
+import piotr.rsrpechhulp.utils.CustomInfoWindowAdapter;
 import piotr.rsrpechhulp.utils.LocationService;
 import piotr.rsrpechhulp.utils.OnRetryClickListener;
 import piotr.rsrpechhulp.utils.Utils;
@@ -34,6 +37,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
 
     private GoogleMap map;
+    private Marker marker;
+    private static final float MAP_ZOOM = 16.0f;
 
     private LocationService locationService;
     private boolean locationServiceBound;
@@ -41,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
     private static final int SEARCH_LOCATION_TIMEOUT = 20000;
+    private static final LatLng AMSTERDAM_LAT_LNG = new LatLng(52.370216, 4.895168);
     private Location lastLocation;
     private Timer locationTimeoutTimer;
 
@@ -69,15 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void bindToLocationService() {
         Intent intent = new Intent(this, LocationService.class);
         locationServiceBound = bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(locationServiceBound){
-            unbindService(locationServiceConnection);
-            locationServiceBound = false;
-        }
     }
 
     private ServiceConnection locationServiceConnection = new ServiceConnection() {
@@ -110,46 +107,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onPause() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
-        if(locationService != null)
-            locationService.stopListening();
-        if(locationTimeoutTimer != null)
-            locationTimeoutTimer.cancel();
-        super.onPause();
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-
-        LatLng sydney = new LatLng(52.370216, 4.895168);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
-
-    public void buttonBack(View view) {
-        finish();
-    }
-
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            //Only checking actions from LocationService
             if(null == action)
                 return;
 
+            //Only checking actions from LocationService
             if (action.equals(LocationService.ACTION_LOCATION_CHANGED)) {
                 final Location location = intent.getParcelableExtra(LocationService.LOCATION_INTENT_EXTRAS);
                 onLocationReceived(location);
@@ -161,23 +126,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lastLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if(map != null) {
-            map.addMarker(new MarkerOptions().position(latLng));
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            setNewLocation(latLng);
         }
     }
 
+    /** This callback is triggered when the map is ready to be used. */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode) {
-            case GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startLocationService();
-                } else {
-                    Toast.makeText(this, R.string.error_gps_no_permissions, Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                break;
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        map.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
+        if(lastLocation == null) {
+            map.moveCamera(CameraUpdateFactory.newLatLng(AMSTERDAM_LAT_LNG));
         }
+    }
+
+    public MarkerOptions createInitMarkerOptions() {
+        final MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker));
+        markerOptions.anchor(0.5f, 1.0f);
+        markerOptions.position(AMSTERDAM_LAT_LNG);
+        markerOptions.infoWindowAnchor(0.5f, -0.2f);
+        return markerOptions;
+    }
+
+    private void hideLocationObtainingImage() {
+        findViewById(R.id.location_obtaining).setVisibility(View.GONE);
+    }
+
+    private void setNewLocation(LatLng latLng) {
+        if(map == null)
+            return;
+
+        hideLocationObtainingImage();
+
+        if(marker == null) {
+            marker = map.addMarker(createInitMarkerOptions());
+            marker.setTitle(getString(R.string.address_obtaining));
+            marker.showInfoWindow();
+        }
+        marker.setPosition(latLng);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
     }
 
     private void checkGPSAndInternetAvailability() {
@@ -231,4 +219,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkGPSAndInternetAvailability();
         }
     };
+
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        if(locationService != null)
+            locationService.stopListening();
+        if(locationTimeoutTimer != null)
+            locationTimeoutTimer.cancel();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(locationServiceBound){
+            unbindService(locationServiceConnection);
+            locationServiceBound = false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationService();
+                } else {
+                    Toast.makeText(this, R.string.error_gps_no_permissions, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+        }
+    }
+
+    public void buttonBack(View view) {
+        finish();
+    }
 }

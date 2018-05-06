@@ -35,7 +35,7 @@
         </activity>
         <activity
                 android:name=".activities.MapsActivity"
-                android:label="@string/title_activity_maps">
+                android:screenOrientation="portrait">
         </activity>
 
         <meta-data

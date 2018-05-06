@@ -13,4 +13,9 @@
     <dimen name="info_icon_size">33dp</dimen>
 
     <dimen name="horizontal_line_height">5dp</dimen>
+
+    <dimen name="address_main_text">14sp</dimen>
+    <dimen name="address_title_text">18sp</dimen>
+    <dimen name="address_window_width">200dp</dimen>
+    <dimen name="address_text_vertical_margin">10dp</dimen>
 </resources>
