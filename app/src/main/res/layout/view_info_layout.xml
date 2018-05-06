@@ -15,7 +15,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/address_title"
-                style="@style/AddressTitleTextAppearance"/>
+                style="@style/PopupTitleTextAppearance"/>
         <TextView
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/address_text_vertical_margin"
                 android:text="@string/address_obtaining"
-                style="@style/AddressTextAppearance"/>
+                style="@style/PopupTextAppearance"/>
         <TextView
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
@@ -32,6 +32,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/address_text_vertical_margin"
                 android:text="@string/address_info"
-                style="@style/AddressTextAppearance"/>
+                style="@style/PopupTextAppearance"/>
     </LinearLayout>
 </RelativeLayout>

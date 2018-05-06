@@ -33,4 +33,12 @@
     <string name="address_info">Onthoud deze locatie voor het telefoongesprek.</string>
     <string name="address_title">Uw Locatie:</string>
     <string name="address_obtaining">Verkrijgen adres&#8230;</string>
+
+    <string name="call_cost_text">Voor dit nummer betaalt u uw gebruikelijke belkosten.</string>
+    <string name="call_cost_title">Belkosten</string>
+    <string name="button_call_now">Bel nu</string>
+    <string name="button_call_rsr_now">Bel RSR nu</string>
+    <string name="button_cancel">Annuleren</string>
+
+    <string name="phone">+31900 77 88 99 0</string>
 </resources>

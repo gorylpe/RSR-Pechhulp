@@ -20,7 +20,7 @@
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
                 android:text="@string/info_back_button_actionbar_title"
-                android:onClick="buttonBack"
+                android:onClick="buttonBackClick"
                 style="@style/ActionBarButtonBack" tools:ignore="OnClick"/>
     </RelativeLayout>
 

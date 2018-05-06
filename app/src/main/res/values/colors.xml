@@ -4,4 +4,6 @@
     <color name="color_background">#FFFFFF</color>
     <color name="color_info_text">#000</color>
     <color name="color_main_text">#fff</color>
+    <color name="color_panel_background">#aacbd401</color>
+    <color name="color_under_panel_background">#aa000000</color>
 </resources>

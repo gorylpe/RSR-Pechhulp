@@ -13,6 +13,8 @@ import android.view.View;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +38,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
+
+    private Button buttonCallNow;
+    private RelativeLayout callPanelWrapper;
 
     private GoogleMap map;
     private Marker marker;
@@ -64,6 +69,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        callPanelWrapper = findViewById(R.id.call_panel_wrapper);
+        buttonCallNow = findViewById(R.id.button_call_now);
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
@@ -143,21 +151,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = googleMap;
         map.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
         if(lastLocation == null) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(AMSTERDAM_LAT_LNG));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(AMSTERDAM_LAT_LNG, MAP_ZOOM));
         }
     }
 
-    public MarkerOptions createInitMarkerOptions() {
+    private MarkerOptions createInitMarkerOptions() {
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker));
         markerOptions.anchor(0.5f, 1.0f);
         markerOptions.position(AMSTERDAM_LAT_LNG);
         markerOptions.infoWindowAnchor(0.5f, -0.2f);
         return markerOptions;
-    }
-
-    private void hideLocationObtainingImage() {
-        findViewById(R.id.location_obtaining).setVisibility(View.GONE);
     }
 
     private void setNewLocation(LatLng latLng) {
@@ -173,6 +177,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         marker.setPosition(latLng);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
+    }
+
+    private void hideLocationObtainingImage() {
+        findViewById(R.id.location_obtaining).setVisibility(View.GONE);
     }
 
     private BroadcastReceiver GPSSwitchStateReceiver = new BroadcastReceiver() {
@@ -273,7 +281,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void buttonBack(View view) {
+    public void buttonCallNowClick(View view) {
+        callPanelWrapper.setVisibility(View.VISIBLE);
+        buttonCallNow.setVisibility(View.GONE);
+    }
+
+    public void buttonPanelCloseClick(View view) {
+        callPanelWrapper.setVisibility(View.GONE);
+        buttonCallNow.setVisibility(View.VISIBLE);
+    }
+
+    public void buttonDialClick(View view) {
+        Utils.dialIfAvailable(this, getString(R.string.phone));
+    }
+
+    public void buttonBackClick(View view) {
         finish();
     }
 }

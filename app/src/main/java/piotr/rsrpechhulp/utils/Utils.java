@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -135,12 +136,12 @@ public class Utils {
         return Utils.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    public static void requestGPSPermissions(Activity activity, final int requestCode) {
-        requestPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION, requestCode);
-    }
-
     public static boolean checkPermission(final Context context, final String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestGPSPermissions(Activity activity, final int requestCode) {
+        requestPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION, requestCode);
     }
 
     public static void requestPermission(final Activity activity, final String permission, final int requestCode) {
@@ -149,5 +150,14 @@ public class Utils {
 
     public static void requestPermissions(final Activity activity, final String[] permissions, final int requestCode) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
+    }
+
+    public static void dialIfAvailable(Context context, String phoneNumber) {
+        Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+        dialIntent.setData(Uri.parse("tel:" + phoneNumber));
+        //check if exists activity that can be started with dialIntent
+        if (context.getPackageManager().queryIntentActivities(dialIntent, 0).size() > 0) {
+            context.startActivity(dialIntent);
+        }
     }
 }
