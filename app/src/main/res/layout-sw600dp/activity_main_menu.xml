@@ -6,6 +6,14 @@
         android:layout_height="match_parent"
         tools:context="piotr.rsrpechhulp.activities.MainMenuActivity">
 
+    <ImageView
+            android:id="@+id/main_menu_background"
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_bg"/>
+
     <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,24 +26,7 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:text="@string/main_menu_actionbar_title"
                 style="@style/ActionBarTextView"/>
-        <Button
-                android:id="@+id/button_info"
-                android:layout_width="@dimen/info_icon_size"
-                android:layout_height="@dimen/info_icon_size"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/main_btn_info"
-                android:onClick="buttonInfoClick"/>
     </RelativeLayout>
-
-    <ImageView
-            android:id="@+id/main_menu_background"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/main_bg"/>
 
     <Button
             android:id="@+id/button_go_to_map"
@@ -45,8 +36,19 @@
             android:text="@string/go_to_map_button"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/button_info"
             android:onClick="buttonMapClick"
             style="@style/DefaultButton"/>
 
+    <Button
+            android:id="@+id/button_info"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/main_i"
+            android:text="@string/info_back_button_actionbar_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_alignParentBottom="true"
+            android:onClick="buttonInfoClick"
+            style="@style/DefaultButton"/>
 </RelativeLayout>

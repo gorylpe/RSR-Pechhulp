@@ -33,70 +33,42 @@
     <RelativeLayout
             android:id="@+id/call_panel_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_height="@dimen/call_panel_height"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"
-            android:background="@color/color_under_panel_background">
-        <RelativeLayout
-                android:id="@+id/call_panel"
-                android:layout_width="@dimen/call_panel_width"
-                android:layout_height="@dimen/call_panel_height"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:padding="@dimen/horizontal_line_height"
-                android:background="@color/color_panel_background">
+            android:background="@color/color_panel_tablet_background">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
             <TextView
                     android:id="@+id/cost_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:gravity="center_horizontal"
-                    android:text="@string/call_cost_title"
+                    android:text="@string/call_cost_title_tablet"
                     style="@style/PopupTitleTextAppearance"/>
             <Button
                     android:id="@+id/button_dial"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/button_width"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/main_btn_phone"
-                    android:layout_alignParentBottom="true"
-                    android:text="@string/button_call_now"
+                    android:text="@string/phone_text"
                     android:onClick="buttonDialClick"
-                    style="@style/DefaultButton"/>
+                    android:background="@null"/>
             <TextView
                     android:id="@+id/cost_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/button_dial"
-                    android:layout_below="@id/cost_title"
                     android:gravity="center"
                     android:text="@string/call_cost_text"
                     style="@style/PopupTextAppearance"/>
-        </RelativeLayout>
-        <Button
-                android:id="@+id/button_close_panel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/call_panel"
-                android:layout_alignStart="@id/call_panel"
-                android:text="@string/button_cancel"
-                android:onClick="buttonPanelCloseClick"
-                style="@style/ButtonPanelClose"/>
+        </LinearLayout>
+
     </RelativeLayout>
-    <Button
-            android:id="@+id/button_call_now"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_alignParentBottom="true"
-            android:drawableStart="@drawable/main_btn_tel"
-            android:text="@string/button_call_rsr_now"
-            android:onClick="buttonCallNowClick"
-            style="@style/DefaultButton"/>
 
     <ImageView
             android:id="@+id/location_obtaining"

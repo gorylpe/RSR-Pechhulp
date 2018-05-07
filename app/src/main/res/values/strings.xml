@@ -36,9 +36,12 @@
 
     <string name="call_cost_text">Voor dit nummer betaalt u uw gebruikelijke belkosten.</string>
     <string name="call_cost_title">Belkosten</string>
+    <string name="call_cost_title_tablet">Neem contact op met RSR Nederland</string>
+
     <string name="button_call_now">Bel nu</string>
     <string name="button_call_rsr_now">Bel RSR nu</string>
     <string name="button_cancel">Annuleren</string>
 
     <string name="phone">+31900 77 88 99 0</string>
+    <string name="phone_text">0900&#8211;7788990</string>
 </resources>

@@ -11,6 +11,7 @@
     <dimen name="button_min_height">45dp</dimen>
 
     <dimen name="info_icon_size">33dp</dimen>
+    <dimen name="info_text_padding_tablet">50dp</dimen>
 
     <dimen name="horizontal_line_height">5dp</dimen>
 
