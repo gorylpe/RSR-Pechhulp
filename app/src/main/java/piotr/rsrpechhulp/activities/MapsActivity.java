@@ -179,6 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.getUiSettings().setMapToolbarEnabled(false);
         map.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
         if(lastLocation == null) {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(AMSTERDAM_LAT_LNG, MAP_ZOOM));

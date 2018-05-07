@@ -13,7 +13,7 @@ public class InfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_info);
     }
 
-    public void buttonBack(View view) {
+    public void buttonBackClick(View view) {
         finish();
     }
 }
