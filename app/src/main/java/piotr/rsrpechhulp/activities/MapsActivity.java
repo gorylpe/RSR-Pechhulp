@@ -4,6 +4,7 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -30,7 +31,6 @@ import piotr.rsrpechhulp.utils.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AddressObtainTask.Callback {
@@ -49,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean locationServiceBound;
     private IntentFilter locationServiceIntentFilter;
 
-    private IntentFilter GPSSwitchStateIntentFilter;
+    private IntentFilter GPSOrInternetChangedIntentFilter;
 
     private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
     private static final int SEARCH_LOCATION_TIMEOUT = 20000;
@@ -79,8 +79,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
 
-        GPSSwitchStateIntentFilter = new IntentFilter();
-        GPSSwitchStateIntentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        GPSOrInternetChangedIntentFilter = new IntentFilter();
+        GPSOrInternetChangedIntentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        GPSOrInternetChangedIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onResume();
         checkGPSAndInternetAvailability();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(locationBroadcastReceiver, locationServiceIntentFilter);
-        registerReceiver(GPSSwitchStateReceiver, GPSSwitchStateIntentFilter);
+        registerReceiver(GPSOrInternetChangedReceiver, GPSOrInternetChangedIntentFilter);
         startLocationService();
     }
 
@@ -199,13 +200,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         findViewById(R.id.location_obtaining).setVisibility(View.GONE);
     }
 
-    private BroadcastReceiver GPSSwitchStateReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver GPSOrInternetChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if(action == null) return;
 
-            if(action.equals(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+            if(action.equals(LocationManager.PROVIDERS_CHANGED_ACTION)
+            || action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 checkGPSAndInternetAvailability();
             }
         }
@@ -266,7 +268,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onPause() {
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(locationBroadcastReceiver);
-        unregisterReceiver(GPSSwitchStateReceiver);
+        unregisterReceiver(GPSOrInternetChangedReceiver);
         if(locationService != null)
             locationService.stopListening();
         if(locationTimeoutTimer != null)
