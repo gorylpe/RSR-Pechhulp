@@ -25,6 +25,10 @@ public class MainMenuActivity extends AppCompatActivity {
         checkGPSAndInternetAvailability();
     }
 
+    /**
+     * Checks GPS enabled state and Internet connectivity.
+     * If there any error occurs, creates proper AlertDialog.
+     */
     private void checkGPSAndInternetAvailability() {
         //Don't check if previous dialog is still opened
         if (lastAlertDialog != null && lastAlertDialog.isShowing())

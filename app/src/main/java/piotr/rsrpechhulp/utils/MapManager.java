@@ -39,6 +39,10 @@ public class MapManager implements OnMapReadyCallback, AddressObtainTask.Callbac
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(AMSTERDAM_LAT_LNG, MAP_ZOOM));
     }
 
+    /**
+     * Places marker with info window on new location given as param
+     * @param latLng new location to place marker on
+     */
     public void setLocation(LatLng latLng) {
         if(map == null)
             return;
@@ -63,6 +67,10 @@ public class MapManager implements OnMapReadyCallback, AddressObtainTask.Callbac
         return markerOptions;
     }
 
+    /**
+     * Called when bounded AddressObtainTask obtains address
+     * @param address the address obtained in AddressObtainTask
+     */
     @Override
     public void onAddressObtained(@NonNull final String address) {
         addressObtainedLock.lock();

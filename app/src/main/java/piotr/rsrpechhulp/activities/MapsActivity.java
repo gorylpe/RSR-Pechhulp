@@ -17,25 +17,18 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import piotr.rsrpechhulp.R;
 import piotr.rsrpechhulp.utils.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class MapsActivity extends FragmentActivity {
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
     private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
     private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
     private static final int SEARCH_LOCATION_TIMEOUT = 20000; //miliseconds
@@ -107,6 +100,9 @@ public class MapsActivity extends FragmentActivity {
         startLocationService();
     }
 
+    /**
+     * Check for gps permission, requests if not granted, otherwise starts LocationService location listening
+     */
     @SuppressWarnings({"MissingPermission"})
     private void startLocationService() {
         if(locationService != null) {
@@ -118,6 +114,9 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * onReceive called when LocationService notifies about new available location
+     */
     private BroadcastReceiver locationBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -144,6 +143,9 @@ public class MapsActivity extends FragmentActivity {
         findViewById(R.id.location_obtaining).setVisibility(View.GONE);
     }
 
+    /**
+     * onReceive called when GPS or Connectivity state changed and requires availability check.
+     */
     private BroadcastReceiver GPSOrInternetChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -157,6 +159,11 @@ public class MapsActivity extends FragmentActivity {
         }
     };
 
+    /**
+     * Checks GPS enabled state and Internet connectivity.
+     * If there any error occurs, creates proper AlertDialog,
+     * if not starts timer to check if location searching doesn't last too long.
+     */
     private void checkGPSAndInternetAvailability() {
         // Don't check if previous dialog is still opened
         if(isActiveAlertDialog())
@@ -175,6 +182,10 @@ public class MapsActivity extends FragmentActivity {
         return lastAlertDialog != null && lastAlertDialog.isShowing();
     }
 
+    /**
+     * Start location searching timeout timer.
+     * After the time has passed runs checking last received location correctness
+     */
     private void startLocationSearchingTimeoutTimer() {
         if(locationTimeoutTimer != null)
             locationTimeoutTimer.cancel();
@@ -193,6 +204,9 @@ public class MapsActivity extends FragmentActivity {
         }, SEARCH_LOCATION_TIMEOUT);
     }
 
+    /**
+     * Checks if we received any location from service or if we do check if its accuracy is enough
+     */
     private void checkLastLocationAccuracy() {
         if(lastLocation == null || lastLocation.getAccuracy() > MINIMUM_LOCATION_ACCURACY) {
             if(!isActiveAlertDialog()){
@@ -229,6 +243,9 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Tries to start location service once again when there was needed requesting GPS permissions
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch(requestCode) {

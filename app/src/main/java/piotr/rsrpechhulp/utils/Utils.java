@@ -152,6 +152,11 @@ public class Utils {
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
+    /**
+     * Helper method used to starts dialer if available with given phone number
+     * @param context the context to start dialer activity from
+     * @param phoneNumber the number to dial
+     */
     public static void dialIfAvailable(Context context, String phoneNumber) {
         Intent dialIntent = new Intent(Intent.ACTION_DIAL);
         dialIntent.setData(Uri.parse("tel:" + phoneNumber));
