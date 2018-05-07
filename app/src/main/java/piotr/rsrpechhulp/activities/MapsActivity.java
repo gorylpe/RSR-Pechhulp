@@ -33,17 +33,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AddressObtainTask.Callback {
+public class MapsActivity extends FragmentActivity {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private static final int GPS_PERMISSIONS_REQUEST_ON_LOCATION_SERVICE_START_CODE = 200;
+    private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
+    private static final int SEARCH_LOCATION_TIMEOUT = 20000; //miliseconds
 
+    private MapManager mapManager;
+
+    private AlertDialog lastAlertDialog;
     private Button buttonCallNow;
     private RelativeLayout callPanelWrapper;
-
-    private GoogleMap map;
-    private Marker marker;
-    private static final float MAP_ZOOM = 16.0f;
 
     private LocationService locationService;
     private boolean locationServiceBound;
@@ -51,30 +52,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private IntentFilter GPSOrInternetChangedIntentFilter;
 
-    private static final float MINIMUM_LOCATION_ACCURACY = 1000.0f;
-    private static final int SEARCH_LOCATION_TIMEOUT = 20000;
-    private static final LatLng AMSTERDAM_LAT_LNG = new LatLng(52.370216, 4.895168);
     private Location lastLocation;
     private Timer locationTimeoutTimer;
-
-    private ReentrantLock addressObtainedLock;
-
-    private AlertDialog lastAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        mapManager = new MapManager(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(mapManager);
 
         callPanelWrapper = findViewById(R.id.call_panel_wrapper);
         buttonCallNow = findViewById(R.id.button_call_now);
-
-        addressObtainedLock = new ReentrantLock();
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
@@ -142,58 +134,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     };
 
     private void onLocationReceived(Location location) {
+        hideLocationObtainingImage();
         lastLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if(map != null) {
-            setNewLocation(latLng);
-        }
-    }
-
-    private void setNewLocation(LatLng latLng) {
-        if(map == null)
-            return;
-
-        hideLocationObtainingImage();
-
-        if(marker == null) {
-            marker = map.addMarker(createInitMarkerOptions());
-            marker.setTitle(getString(R.string.address_obtaining));
-            marker.showInfoWindow();
-        }
-        marker.setPosition(latLng);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM));
-
-        new AddressObtainTask(this, this).execute(latLng);
-    }
-
-    @Override
-    public void onAddressObtained(@NonNull final String address) {
-        addressObtainedLock.lock();
-        if(marker != null) {
-            marker.setTitle(address);
-            marker.showInfoWindow();
-        }
-        addressObtainedLock.unlock();
-    }
-
-    /** This callback is triggered when the map is ready to be used. */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setMapToolbarEnabled(false);
-        map.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
-        if(lastLocation == null) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(AMSTERDAM_LAT_LNG, MAP_ZOOM));
-        }
-    }
-
-    private MarkerOptions createInitMarkerOptions() {
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker));
-        markerOptions.anchor(0.5f, 1.0f);
-        markerOptions.position(AMSTERDAM_LAT_LNG);
-        markerOptions.infoWindowAnchor(0.5f, -0.2f);
-        return markerOptions;
+        mapManager.setLocation(latLng);
     }
 
     private void hideLocationObtainingImage() {
