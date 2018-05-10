@@ -55,11 +55,11 @@ public class MapsActivity extends FragmentActivity {
 
         mapManager = new MapManager(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_maps);
         mapFragment.getMapAsync(mapManager);
 
-        callPanelWrapper = findViewById(R.id.call_panel_wrapper);
-        buttonCallNow = findViewById(R.id.button_call_now);
+        callPanelWrapper = findViewById(R.id.rl_maps_call_popup_wrapper);
+        buttonCallNow = findViewById(R.id.btn_maps_call_now);
 
         locationServiceIntentFilter = new IntentFilter();
         locationServiceIntentFilter.addAction(LocationService.ACTION_LOCATION_CHANGED);
@@ -140,7 +140,7 @@ public class MapsActivity extends FragmentActivity {
     }
 
     private void hideLocationObtainingImage() {
-        findViewById(R.id.location_obtaining).setVisibility(View.GONE);
+        findViewById(R.id.imv_maps_location_obtaining).setVisibility(View.GONE);
     }
 
     /**
@@ -260,21 +260,21 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    public void buttonCallNowClick(View view) {
+    public void btnCallNowClick(View view) {
         callPanelWrapper.setVisibility(View.VISIBLE);
         buttonCallNow.setVisibility(View.GONE);
     }
 
-    public void buttonPanelCloseClick(View view) {
+    public void btnPopupCloseClick(View view) {
         callPanelWrapper.setVisibility(View.GONE);
         buttonCallNow.setVisibility(View.VISIBLE);
     }
 
-    public void buttonDialClick(View view) {
+    public void btnDialClick(View view) {
         Utils.dialIfAvailable(this, getString(R.string.popup_phone));
     }
 
-    public void buttonBackClick(View view) {
+    public void btnBackClick(View view) {
         finish();
     }
 }

@@ -9,32 +9,32 @@
         tools:context="piotr.rsrpechhulp.activities.MapsActivity">
 
     <RelativeLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/rl_maps_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_actionbar"
             style="@style/ActionBar">
         <Button
-                android:id="@+id/button_info"
+                android:id="@+id/btn_maps_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
                 android:text="@string/maps_btn_back_actionbar_title"
-                android:onClick="buttonBackClick"
+                android:onClick="btnBackClick"
                 style="@style/ActionBarButtonBack"/>
     </RelativeLayout>
 
     <fragment
-              android:id="@+id/map"
+              android:id="@+id/map_maps"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_below="@id/toolbar"
+              android:layout_below="@id/rl_maps_toolbar"
               map:uiZoomControls="false"
               map:uiCompass="false"
               android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <RelativeLayout
-            android:id="@+id/call_panel_wrapper"
+            android:id="@+id/rl_maps_call_popup_wrapper"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_call_popup"
             android:layout_alignParentBottom="true"
@@ -48,22 +48,22 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
             <TextView
-                    android:id="@+id/cost_title"
+                    android:id="@+id/txv_maps_cost_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/popup_call_cost_title_tablet"
                     style="@style/TextAppearancePopupTitle"/>
             <Button
-                    android:id="@+id/button_dial"
+                    android:id="@+id/btn_maps_dial"
                     android:layout_width="@dimen/width_btn"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/main_btn_phone"
                     android:text="@string/popup_phone_content"
-                    android:onClick="buttonDialClick"
+                    android:onClick="btnDialClick"
                     android:background="@null"/>
             <TextView
-                    android:id="@+id/cost_text"
+                    android:id="@+id/txv_maps_cost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -74,7 +74,7 @@
     </RelativeLayout>
 
     <ImageView
-            android:id="@+id/location_obtaining"
+            android:id="@+id/imv_maps_location_obtaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/clock_mini"

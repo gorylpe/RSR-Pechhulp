@@ -7,15 +7,15 @@
         tools:context="piotr.rsrpechhulp.activities.MainMenuActivity">
 
     <ImageView
-            android:id="@+id/main_menu_background"
-            android:layout_below="@id/toolbar"
+            android:id="@+id/imv_main_menu_background"
+            android:layout_below="@id/rl_main_menu_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/main_bg"/>
 
     <RelativeLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/rl_main_menu_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_actionbar"
             android:background="@drawable/btn_bg">
@@ -29,19 +29,19 @@
     </RelativeLayout>
 
     <Button
-            android:id="@+id/button_go_to_map"
+            android:id="@+id/btn_main_menu_go_to_map"
             android:layout_width="@dimen/width_btn"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/main_btn_warning"
             android:text="@string/main_menu_go_to_map_btn"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/margin_vertical_all"
-            android:layout_above="@id/button_info"
-            android:onClick="buttonMapClick"
+            android:layout_above="@id/btn_main_menu_info"
+            android:onClick="btnMapClick"
             style="@style/ButtonDefault"/>
 
     <Button
-            android:id="@+id/button_info"
+            android:id="@+id/btn_main_menu_info"
             android:layout_width="@dimen/width_btn"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/main_i"
@@ -49,6 +49,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/margin_vertical_all"
             android:layout_alignParentBottom="true"
-            android:onClick="buttonInfoClick"
+            android:onClick="btnInfoClick"
             style="@style/ButtonDefault"/>
 </RelativeLayout>

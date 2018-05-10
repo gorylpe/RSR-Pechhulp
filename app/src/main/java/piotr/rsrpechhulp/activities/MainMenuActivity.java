@@ -49,11 +49,11 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     };
 
-    public void buttonInfoClick(View view) {
+    public void btnInfoClick(View view) {
         startActivity(new Intent(this, InfoActivity.class));
     }
 
-    public void buttonMapClick(View view) {
+    public void btnMapClick(View view) {
         startActivity(new Intent(this, MapsActivity.class));
     }
 }

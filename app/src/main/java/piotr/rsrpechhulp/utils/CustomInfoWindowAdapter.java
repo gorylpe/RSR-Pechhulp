@@ -1,7 +1,6 @@
 package piotr.rsrpechhulp.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -19,8 +18,8 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     @Override
     public View getInfoWindow(Marker marker) {
-        View view = layoutInflater.inflate(R.layout.view_info_layout, null);
-        ((TextView) view.findViewById(R.id.address_text)).setText(marker.getTitle());
+        View view = layoutInflater.inflate(R.layout.layout_maps_info_window, null);
+        ((TextView) view.findViewById(R.id.txv_maps_info_window)).setText(marker.getTitle());
         return view;
     }
 

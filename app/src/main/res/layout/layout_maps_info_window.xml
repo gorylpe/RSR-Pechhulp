@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="@drawable/popup_bg"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_bg">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="@dimen/width_popup"
             android:layout_height="wrap_content">
         <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/popup_address_title"
                 style="@style/TextAppearancePopupTitle"/>
         <TextView
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/address_text"
+                android:id="@+id/txv_maps_info_window"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_vertical_popup_txv"
                 android:text="@string/popup_address_obtaining"
                 style="@style/TextAppearancePopup"/>
         <TextView
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_vertical_popup_txv"
                 android:text="@string/popup_address_info"
                 style="@style/TextAppearancePopup"/>

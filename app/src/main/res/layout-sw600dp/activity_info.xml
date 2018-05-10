@@ -8,24 +8,24 @@
         tools:context="piotr.rsrpechhulp.activities.InfoActivity">
 
     <RelativeLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/rl_info_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_actionbar"
             style="@style/ActionBar">
         <Button
-                android:id="@+id/button_info"
+                android:id="@+id/btn_back_info"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/margin_horizontal_all"
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
                 android:text="@string/info_btn_back_actionbar_title"
-                android:onClick="buttonBackClick"
+                android:onClick="btnBackClick"
                 style="@style/ActionBarButtonBack" tools:ignore="OnClick"/>
     </RelativeLayout>
 
     <ImageView
-            android:id="@+id/info_background"
+            android:id="@+id/imv_info_background"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -33,13 +33,13 @@
             android:src="@drawable/info_bg"/>
 
     <View
-            android:id="@+id/divisor"
+            android:id="@+id/info_divisor"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_horizontal_line"
             android:background="@color/bondi_blue"/>
 
     <ScrollView
-            android:id="@+id/info_text_scroll"
+            android:id="@+id/scv_info"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             <TextView
-                    android:id="@+id/info_text"
+                    android:id="@+id/txv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_info_text_tablet"
