@@ -49,7 +49,7 @@ public class MapManager implements OnMapReadyCallback, AddressObtainTask.Callbac
 
         if(marker == null) {
             marker = map.addMarker(createInitMarkerOptions());
-            marker.setTitle(activity.getString(R.string.address_obtaining));
+            marker.setTitle(activity.getString(R.string.popup_address_obtaining));
             marker.showInfoWindow();
         }
         marker.setPosition(latLng);

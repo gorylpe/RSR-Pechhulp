@@ -11,7 +11,7 @@
     <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/actionbar_height"
+            android:layout_height="@dimen/height_actionbar"
             style="@style/ActionBar">
         <Button
                 android:id="@+id/button_info"
@@ -41,7 +41,7 @@
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
-            android:background="@color/color_under_panel_background">
+            android:background="@color/popup_underlying_background">
         <RelativeLayout
                 android:id="@+id/call_panel"
                 android:layout_width="@dimen/call_panel_width"
@@ -50,7 +50,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:padding="@dimen/horizontal_line_height"
-                android:background="@color/color_panel_background">
+                android:background="@color/popup_background">
             <TextView
                     android:id="@+id/cost_title"
                     android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:gravity="center_horizontal"
-                    android:text="@string/call_cost_title"
+                    android:text="@string/popup_call_cost_title"
                     style="@style/PopupTitleTextAppearance"/>
             <Button
                     android:id="@+id/button_dial"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/main_btn_phone"
                     android:layout_alignParentBottom="true"
-                    android:text="@string/button_call_now"
+                    android:text="@string/popup_button_call_now"
                     android:onClick="buttonDialClick"
                     style="@style/DefaultButton"/>
             <TextView
@@ -76,7 +76,7 @@
                     android:layout_above="@id/button_dial"
                     android:layout_below="@id/cost_title"
                     android:gravity="center"
-                    android:text="@string/call_cost_text"
+                    android:text="@string/popup_call_cost_text"
                     style="@style/PopupTextAppearance"/>
         </RelativeLayout>
         <Button
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/call_panel"
                 android:layout_alignStart="@id/call_panel"
-                android:text="@string/button_cancel"
+                android:text="@string/popup_button_cancel"
                 android:onClick="buttonPanelCloseClick"
                 style="@style/ButtonPanelClose"/>
     </RelativeLayout>
@@ -97,7 +97,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_alignParentBottom="true"
             android:drawableStart="@drawable/main_btn_tel"
-            android:text="@string/button_call_rsr_now"
+            android:text="@string/popup_button_call_rsr_now"
             android:onClick="buttonCallNowClick"
             style="@style/DefaultButton"/>
 

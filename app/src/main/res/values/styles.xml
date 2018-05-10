@@ -8,7 +8,7 @@
 
     <style name="DefaultButton">
         <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/color_main_text</item>
+        <item name="android:textColor">@color/all_text</item>
         <item name="android:background">@drawable/main_btn_bg</item>
         <item name="android:paddingLeft">@dimen/button_horizontal_padding</item>
         <item name="android:paddingRight">@dimen/button_horizontal_padding</item>
@@ -22,37 +22,37 @@
 
     <style name="ActionBarTextView">
         <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/color_main_text</item>
+        <item name="android:textColor">@color/all_text</item>
     </style>
 
     <style name="ActionBarButtonBack" parent="DefaultButton">
         <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:minHeight">@dimen/actionbar_height</item>
+        <item name="android:minHeight">@dimen/height_actionbar</item>
         <item name="android:drawableLeft">@drawable/menu_arrow</item>
         <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
     </style>
 
     <style name="InfoTextAppearance">
         <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/color_info_text</item>
-        <item name="android:textColorLink">@color/color_primary</item>
+        <item name="android:textColor">@color/info_text</item>
+        <item name="android:textColorLink">@color/all_primary</item>
     </style>
 
     <style name="PopupTitleTextAppearance">
         <item name="android:textSize">@dimen/popup_title_text</item>
-        <item name="android:textColor">@color/color_main_text</item>
+        <item name="android:textColor">@color/all_text</item>
     </style>
 
     <style name="PopupTextAppearance">
         <item name="android:textSize">@dimen/popup_main_text</item>
-        <item name="android:textColor">@color/color_main_text</item>
+        <item name="android:textColor">@color/all_text</item>
     </style>
 
     <style name="ButtonPanelClose">
         <item name="android:textSize">@dimen/popup_main_text</item>
-        <item name="android:textColor">@color/color_main_text</item>
-        <item name="android:background">@color/color_primary</item>
+        <item name="android:textColor">@color/all_text</item>
+        <item name="android:background">@color/all_primary</item>
         <item name="android:paddingLeft">@dimen/button_panel_close_padding</item>
         <item name="android:paddingRight">@dimen/button_panel_close_padding</item>
         <item name="android:minHeight">@dimen/button_panel_close_min_height</item>

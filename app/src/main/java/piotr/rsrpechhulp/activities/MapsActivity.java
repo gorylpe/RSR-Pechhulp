@@ -271,7 +271,7 @@ public class MapsActivity extends FragmentActivity {
     }
 
     public void buttonDialClick(View view) {
-        Utils.dialIfAvailable(this, getString(R.string.phone));
+        Utils.dialIfAvailable(this, getString(R.string.popup_phone));
     }
 
     public void buttonBackClick(View view) {

@@ -42,7 +42,7 @@
             android:layout_width="@dimen/button_width"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/main_btn_warning"
-            android:text="@string/go_to_map_button"
+            android:text="@string/main_menu_go_to_map_button"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_alignParentBottom="true"

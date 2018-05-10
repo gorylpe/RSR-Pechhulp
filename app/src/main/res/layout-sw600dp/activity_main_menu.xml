@@ -17,7 +17,7 @@
     <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/actionbar_height"
+            android:layout_height="@dimen/height_actionbar"
             android:background="@drawable/btn_bg">
         <TextView
                 android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:layout_width="@dimen/button_width"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/main_btn_warning"
-            android:text="@string/go_to_map_button"
+            android:text="@string/main_menu_go_to_map_button"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_above="@id/button_info"

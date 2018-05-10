@@ -2,7 +2,7 @@
     <string name="app_name">RSR Pechhulp</string>
 
     <string name="main_menu_actionbar_title">RSR Revalidatieservice</string>
-    <string name="go_to_map_button">RSR Pechhulp</string>
+    <string name="main_menu_go_to_map_button">RSR Pechhulp</string>
 
     <string name="info_back_button_actionbar_title">Over RSR</string>
     <string name="info_text">Met de hulpmiddelen van RSR blijft u mobiel. RSR is dé leverancier van hulpmiddelen in de
@@ -30,18 +30,18 @@
     <string name="error_location_text">Het is niet gelukt uw huidige locatie te bepalen.</string>
     <string name="error_location_title">Locatie kan niet worden gevonden</string>
 
-    <string name="address_info">Onthoud deze locatie voor het telefoongesprek.</string>
-    <string name="address_title">Uw Locatie:</string>
-    <string name="address_obtaining">Verkrijgen adres&#8230;</string>
+    <string name="popup_address_info">Onthoud deze locatie voor het telefoongesprek.</string>
+    <string name="popup_address_title">Uw Locatie:</string>
+    <string name="popup_address_obtaining">Verkrijgen adres&#8230;</string>
 
-    <string name="call_cost_text">Voor dit nummer betaalt u uw gebruikelijke belkosten.</string>
-    <string name="call_cost_title">Belkosten</string>
-    <string name="call_cost_title_tablet">Neem contact op met RSR Nederland</string>
+    <string name="popup_call_cost_text">Voor dit nummer betaalt u uw gebruikelijke belkosten.</string>
+    <string name="popup_call_cost_title">Belkosten</string>
+    <string name="popup_call_cost_title_tablet">Neem contact op met RSR Nederland</string>
 
-    <string name="button_call_now">Bel nu</string>
-    <string name="button_call_rsr_now">Bel RSR nu</string>
-    <string name="button_cancel">Annuleren</string>
+    <string name="popup_button_call_now">Bel nu</string>
+    <string name="popup_button_call_rsr_now">Bel RSR nu</string>
+    <string name="popup_button_cancel">Annuleren</string>
 
-    <string name="phone">+31900 77 88 99 0</string>
-    <string name="phone_text">0900&#8211;7788990</string>
+    <string name="popup_phone">+31900 77 88 99 0</string>
+    <string name="popup_phone_text">0900&#8211;7788990</string>
 </resources>

@@ -36,14 +36,14 @@
             android:id="@+id/divisor"
             android:layout_width="match_parent"
             android:layout_height="@dimen/horizontal_line_height"
-            android:background="@color/color_primary"/>
+            android:background="@color/all_primary"/>
 
     <ScrollView
             android:id="@+id/info_text_scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:background="@color/color_background">
+            android:background="@color/all_background">
         <TextView
                 android:id="@+id/info_text"
                 android:layout_width="match_parent"
