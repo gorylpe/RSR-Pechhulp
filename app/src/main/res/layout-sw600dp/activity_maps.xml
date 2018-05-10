@@ -11,7 +11,7 @@
     <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/actionbar_height"
+            android:layout_height="@dimen/height_actionbar"
             style="@style/ActionBar">
         <Button
                 android:id="@+id/button_info"
@@ -19,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
-                android:text="@string/maps_back_button_actionbar_title"
+                android:text="@string/maps_btn_back_actionbar_title"
                 android:onClick="buttonBackClick"
                 style="@style/ActionBarButtonBack"/>
     </RelativeLayout>
@@ -36,12 +36,12 @@
     <RelativeLayout
             android:id="@+id/call_panel_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/call_panel_height"
+            android:layout_height="@dimen/height_call_popup"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:background="@color/popup_background_tablet">
+            android:background="@color/bondi_blue_67">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -53,13 +53,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/popup_call_cost_title_tablet"
-                    style="@style/PopupTitleTextAppearance"/>
+                    style="@style/TextAppearancePopupTitle"/>
             <Button
                     android:id="@+id/button_dial"
-                    android:layout_width="@dimen/button_width"
+                    android:layout_width="@dimen/width_btn"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/main_btn_phone"
-                    android:text="@string/popup_phone_text"
+                    android:text="@string/popup_phone_content"
                     android:onClick="buttonDialClick"
                     android:background="@null"/>
             <TextView
@@ -67,8 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/popup_call_cost_text"
-                    style="@style/PopupTextAppearance"/>
+                    android:text="@string/popup_call_cost_content"
+                    style="@style/TextAppearancePopup"/>
         </LinearLayout>
 
     </RelativeLayout>

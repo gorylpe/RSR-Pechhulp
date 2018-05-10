@@ -6,13 +6,13 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="DefaultButton">
-        <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/all_text</item>
+    <style name="ButtonDefault">
+        <item name="android:textSize">@dimen/textsize_btn</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/main_btn_bg</item>
-        <item name="android:paddingLeft">@dimen/button_horizontal_padding</item>
-        <item name="android:paddingRight">@dimen/button_horizontal_padding</item>
-        <item name="android:minHeight">@dimen/button_min_height</item>
+        <item name="android:paddingLeft">@dimen/padding_horizontal_btn</item>
+        <item name="android:paddingRight">@dimen/padding_horizontal_btn</item>
+        <item name="android:minHeight">@dimen/height_btn_min</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
 
@@ -21,43 +21,43 @@
     </style>
 
     <style name="ActionBarTextView">
-        <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/all_text</item>
+        <item name="android:textSize">@dimen/textsize_btn</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="ActionBarButtonBack" parent="DefaultButton">
-        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+    <style name="ActionBarButtonBack" parent="ButtonDefault">
+        <item name="android:paddingLeft">@dimen/margin_horizontal_all</item>
+        <item name="android:paddingRight">@dimen/margin_horizontal_all</item>
         <item name="android:minHeight">@dimen/height_actionbar</item>
         <item name="android:drawableLeft">@drawable/menu_arrow</item>
-        <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
+        <item name="android:drawablePadding">@dimen/margin_horizontal_all</item>
     </style>
 
-    <style name="InfoTextAppearance">
-        <item name="android:textSize">@dimen/buttons_text</item>
-        <item name="android:textColor">@color/info_text</item>
-        <item name="android:textColorLink">@color/all_primary</item>
+    <style name="TextAppearanceInfo">
+        <item name="android:textSize">@dimen/textsize_btn</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorLink">@color/bondi_blue</item>
     </style>
 
-    <style name="PopupTitleTextAppearance">
-        <item name="android:textSize">@dimen/popup_title_text</item>
-        <item name="android:textColor">@color/all_text</item>
+    <style name="TextAppearancePopupTitle">
+        <item name="android:textSize">@dimen/textsize_popup_title</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="PopupTextAppearance">
-        <item name="android:textSize">@dimen/popup_main_text</item>
-        <item name="android:textColor">@color/all_text</item>
+    <style name="TextAppearancePopup">
+        <item name="android:textSize">@dimen/textsize_popup</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="ButtonPanelClose">
-        <item name="android:textSize">@dimen/popup_main_text</item>
-        <item name="android:textColor">@color/all_text</item>
-        <item name="android:background">@color/all_primary</item>
-        <item name="android:paddingLeft">@dimen/button_panel_close_padding</item>
-        <item name="android:paddingRight">@dimen/button_panel_close_padding</item>
-        <item name="android:minHeight">@dimen/button_panel_close_min_height</item>
+    <style name="ButtonPopupClose">
+        <item name="android:textSize">@dimen/textsize_popup</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/bondi_blue</item>
+        <item name="android:paddingLeft">@dimen/padding_popup_btn_close</item>
+        <item name="android:paddingRight">@dimen/padding_popup_btn_close</item>
+        <item name="android:minHeight">@dimen/height_popup_btn_close_min</item>
         <item name="android:drawableLeft">@drawable/main_btn_close</item>
-        <item name="android:drawablePadding">@dimen/button_panel_close_padding</item>
+        <item name="android:drawablePadding">@dimen/padding_popup_btn_close</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
 </resources>

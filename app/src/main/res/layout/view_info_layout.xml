@@ -6,7 +6,7 @@
         android:layout_height="wrap_content">
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="@dimen/address_window_width"
+            android:layout_width="@dimen/width_popup"
             android:layout_height="wrap_content">
         <TextView
                 android:textStyle="bold"
@@ -15,23 +15,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/popup_address_title"
-                style="@style/PopupTitleTextAppearance"/>
+                style="@style/TextAppearancePopupTitle"/>
         <TextView
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/address_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/address_text_vertical_margin"
+                android:layout_marginTop="@dimen/margin_vertical_popup_txv"
                 android:text="@string/popup_address_obtaining"
-                style="@style/PopupTextAppearance"/>
+                style="@style/TextAppearancePopup"/>
         <TextView
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/address_text_vertical_margin"
+                android:layout_marginTop="@dimen/margin_vertical_popup_txv"
                 android:text="@string/popup_address_info"
-                style="@style/PopupTextAppearance"/>
+                style="@style/TextAppearancePopup"/>
     </LinearLayout>
 </RelativeLayout>

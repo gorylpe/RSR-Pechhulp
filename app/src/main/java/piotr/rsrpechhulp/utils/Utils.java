@@ -50,7 +50,7 @@ public class Utils {
                         activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
-                .setNegativeButton(R.string.error_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.all_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -94,7 +94,7 @@ public class Utils {
                         onRetryClickListener.onRetryClick();
                     }
                 })
-                .setNegativeButton(R.string.error_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.all_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -113,7 +113,7 @@ public class Utils {
      */
     public static AlertDialog buildAlertMessageBadLocation(final Activity activity, final OnRetryClickListener onRetryClickListener) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(R.string.error_location_text)
+        builder.setMessage(R.string.error_location_content)
                 .setTitle(R.string.error_location_title)
                 .setCancelable(false)
                 .setPositiveButton(R.string.error_retry, new DialogInterface.OnClickListener() {
@@ -122,7 +122,7 @@ public class Utils {
                         onRetryClickListener.onRetryClick();
                     }
                 })
-                .setNegativeButton(R.string.error_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.all_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();

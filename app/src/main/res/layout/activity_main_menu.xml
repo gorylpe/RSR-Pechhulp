@@ -9,20 +9,20 @@
     <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/actionbar_height"
+            android:layout_height="@dimen/height_actionbar"
             android:background="@drawable/btn_bg">
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/margin_horizontal_all"
                 android:text="@string/main_menu_actionbar_title"
                 style="@style/ActionBarTextView"/>
         <Button
                 android:id="@+id/button_info"
-                android:layout_width="@dimen/info_icon_size"
-                android:layout_height="@dimen/info_icon_size"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_width="@dimen/size_info_icon"
+                android:layout_height="@dimen/size_info_icon"
+                android:layout_marginEnd="@dimen/margin_horizontal_all"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/main_btn_info"
@@ -39,14 +39,14 @@
 
     <Button
             android:id="@+id/button_go_to_map"
-            android:layout_width="@dimen/button_width"
+            android:layout_width="@dimen/width_btn"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/main_btn_warning"
-            android:text="@string/main_menu_go_to_map_button"
+            android:text="@string/main_menu_go_to_map_btn"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/margin_vertical_all"
             android:layout_alignParentBottom="true"
             android:onClick="buttonMapClick"
-            style="@style/DefaultButton"/>
+            style="@style/ButtonDefault"/>
 
 </RelativeLayout>

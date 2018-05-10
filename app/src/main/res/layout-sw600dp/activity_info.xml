@@ -16,10 +16,10 @@
                 android:id="@+id/button_info"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/margin_horizontal_all"
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
-                android:text="@string/info_back_button_actionbar_title"
+                android:text="@string/info_btn_back_actionbar_title"
                 android:onClick="buttonBackClick"
                 style="@style/ActionBarButtonBack" tools:ignore="OnClick"/>
     </RelativeLayout>
@@ -35,15 +35,15 @@
     <View
             android:id="@+id/divisor"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/horizontal_line_height"
-            android:background="@color/all_primary"/>
+            android:layout_height="@dimen/height_horizontal_line"
+            android:background="@color/bondi_blue"/>
 
     <ScrollView
             android:id="@+id/info_text_scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:background="@color/all_background">
+            android:background="@color/white">
 
         <LinearLayout
                 android:orientation="vertical"
@@ -53,16 +53,16 @@
                     android:id="@+id/info_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/info_text_padding_tablet"
-                    android:text="@string/info_text"
+                    android:padding="@dimen/padding_info_text_tablet"
+                    android:text="@string/info_content"
                     android:autoLink="web"
-                    style="@style/InfoTextAppearance"/>
+                    style="@style/TextAppearanceInfo"/>
 
             <ImageView
                     android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginTop="@dimen/margin_vertical_all"
                     android:src="@drawable/splash_logo_rsr"/>
         </LinearLayout>
 

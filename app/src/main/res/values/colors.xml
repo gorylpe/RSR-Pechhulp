@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="all_primary">#0092bb</color>
-    <color name="all_background">#FFFFFF</color>
-    <color name="info_text">#000</color>
-    <color name="all_text">#fff</color>
-    <color name="popup_background">#aacbd401</color>
-    <color name="popup_background_tablet">#aa0092bb</color>
-    <color name="popup_underlying_background">#aa000000</color>
+    <color name="black">#000</color>
+    <color name="black_66">#aa000000</color>
+    <color name="white">#fff</color>
+    <color name="rio_grande_67">#aacbd401</color>
+    <color name="bondi_blue">#0092bb</color>
+    <color name="bondi_blue_67">#aa0092bb</color>
 </resources>

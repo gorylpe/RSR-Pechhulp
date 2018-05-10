@@ -19,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:drawableStart="@drawable/menu_arrow"
-                android:text="@string/maps_back_button_actionbar_title"
+                android:text="@string/maps_btn_back_actionbar_title"
                 android:onClick="buttonBackClick"
                 style="@style/ActionBarButtonBack"/>
     </RelativeLayout>
@@ -41,34 +41,34 @@
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
-            android:background="@color/popup_underlying_background">
+            android:background="@color/black_66">
         <RelativeLayout
                 android:id="@+id/call_panel"
-                android:layout_width="@dimen/call_panel_width"
-                android:layout_height="@dimen/call_panel_height"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_width="@dimen/width_call_popup"
+                android:layout_height="@dimen/height_call_popup"
+                android:layout_marginBottom="@dimen/margin_vertical_all"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:padding="@dimen/horizontal_line_height"
-                android:background="@color/popup_background">
+                android:padding="@dimen/height_horizontal_line"
+                android:background="@color/rio_grande_67">
             <TextView
                     android:id="@+id/cost_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginTop="@dimen/margin_vertical_all"
                     android:gravity="center_horizontal"
                     android:text="@string/popup_call_cost_title"
-                    style="@style/PopupTitleTextAppearance"/>
+                    style="@style/TextAppearancePopupTitle"/>
             <Button
                     android:id="@+id/button_dial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/main_btn_phone"
                     android:layout_alignParentBottom="true"
-                    android:text="@string/popup_button_call_now"
+                    android:text="@string/popup_btn_call_now"
                     android:onClick="buttonDialClick"
-                    style="@style/DefaultButton"/>
+                    style="@style/ButtonDefault"/>
             <TextView
                     android:id="@+id/cost_text"
                     android:layout_width="match_parent"
@@ -76,8 +76,8 @@
                     android:layout_above="@id/button_dial"
                     android:layout_below="@id/cost_title"
                     android:gravity="center"
-                    android:text="@string/popup_call_cost_text"
-                    style="@style/PopupTextAppearance"/>
+                    android:text="@string/popup_call_cost_content"
+                    style="@style/TextAppearancePopup"/>
         </RelativeLayout>
         <Button
                 android:id="@+id/button_close_panel"
@@ -85,21 +85,21 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/call_panel"
                 android:layout_alignStart="@id/call_panel"
-                android:text="@string/popup_button_cancel"
+                android:text="@string/all_cancel"
                 android:onClick="buttonPanelCloseClick"
-                style="@style/ButtonPanelClose"/>
+                style="@style/ButtonPopupClose"/>
     </RelativeLayout>
     <Button
             android:id="@+id/button_call_now"
-            android:layout_width="@dimen/button_width"
+            android:layout_width="@dimen/width_btn"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/margin_vertical_all"
             android:layout_alignParentBottom="true"
             android:drawableStart="@drawable/main_btn_tel"
-            android:text="@string/popup_button_call_rsr_now"
+            android:text="@string/popup_btn_call_rsr_now"
             android:onClick="buttonCallNowClick"
-            style="@style/DefaultButton"/>
+            style="@style/ButtonDefault"/>
 
     <ImageView
             android:id="@+id/location_obtaining"

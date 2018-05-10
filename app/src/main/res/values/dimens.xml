@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_horizontal_margin">10dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="margin_horizontal_all">10dp</dimen>
+    <dimen name="margin_vertical_all">16dp</dimen>
 
-    <dimen name="actionbar_height">50dp</dimen>
+    <dimen name="height_actionbar">50dp</dimen>
 
-    <dimen name="buttons_text">16sp</dimen>
-    <dimen name="button_width">270dp</dimen>
-    <dimen name="button_horizontal_padding">20dp</dimen>
-    <dimen name="button_min_height">45dp</dimen>
+    <dimen name="textsize_btn">16sp</dimen>
+    <dimen name="width_btn">270dp</dimen>
+    <dimen name="padding_horizontal_btn">20dp</dimen>
+    <dimen name="height_btn_min">45dp</dimen>
 
-    <dimen name="info_icon_size">33dp</dimen>
-    <dimen name="info_text_padding_tablet">50dp</dimen>
+    <dimen name="size_info_icon">33dp</dimen>
+    <dimen name="padding_info_text_tablet">50dp</dimen>
 
-    <dimen name="horizontal_line_height">5dp</dimen>
+    <dimen name="height_horizontal_line">5dp</dimen>
 
-    <dimen name="popup_main_text">14sp</dimen>
-    <dimen name="popup_title_text">18sp</dimen>
-    <dimen name="address_window_width">200dp</dimen>
-    <dimen name="address_text_vertical_margin">10dp</dimen>
+    <dimen name="textsize_popup">14sp</dimen>
+    <dimen name="textsize_popup_title">18sp</dimen>
+    <dimen name="width_popup">200dp</dimen>
+    <dimen name="margin_vertical_popup_txv">10dp</dimen>
 
-    <dimen name="call_panel_height">200dp</dimen>
-    <dimen name="call_panel_width">270dp</dimen>
+    <dimen name="height_call_popup">200dp</dimen>
+    <dimen name="width_call_popup">270dp</dimen>
 
-    <dimen name="button_panel_close_min_height">25dp</dimen>
-    <dimen name="button_panel_close_padding">16dp</dimen>
+    <dimen name="height_popup_btn_close_min">25dp</dimen>
+    <dimen name="padding_popup_btn_close">16dp</dimen>
 </resources>
